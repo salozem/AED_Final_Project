@@ -148,7 +148,6 @@
     <ClInclude Include="DataSetGenerator.hpp" />
     <ClInclude Include="Efectivo.hpp" />
     <ClInclude Include="Files.hpp" />
-    <ClInclude Include="HashTable.hpp" />
     <ClInclude Include="Lista.hpp" />
     <ClInclude Include="Tarjeta.hpp" />
   </ItemGroup>
