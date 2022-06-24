@@ -1,5 +1,6 @@
 #pragma once
-#include "DataSetGenerator.hpp"
+#include "DataSetGenerator.hpp"	 
+#include "Cola.hpp"
 #include <iostream>
 
 using namespace std;
@@ -9,6 +10,12 @@ class Files
 private:
 	Efectivo* efectivo;
 	Tarjeta* tarjeta;
+	Cola<double> ahorros;
+	Cola<double> depositos;
+	Cola<double> salarios;
+	Cola<double> comidas;
+	Cola<double> salud;
+	Cola<double> entrenimientos;
 
 public:
 	Files (Tarjeta* tarjeta, Efectivo* efectivo) 
@@ -70,111 +77,176 @@ public:
 		}
 		file.close();
 	}
-	float leerIngresos(int cuenta, float balance)
+	void leerIngresos(int cuenta)
 	{
-		int i, pos;
-		double bal = 0.0, aumento = 0.0;
-		Ingreso* aux;
+		int i;
 		if (cuenta == 1) {
 			for (i = 0; i < efectivo->getIngresos()->longitud(); i++)
 			{
-				pos = i;
-				aux = new Ingreso(efectivo->getIngresos()->posicion(i)->getTotal(), efectivo->getIngresos()->posicion(i)->getTipo());
-
-				while ((pos > 0) && (efectivo->getIngresos()->posicion(i)->getTotal() > aux->getTotal()))
+				if (efectivo->getIngresos()->posicion(i)->getTipo() == "ahorro")
 				{
-					efectivo->getIngresos()->posicion(pos)->setTotal(efectivo->getIngresos()->posicion(pos - 1)->getTotal());
-					efectivo->getIngresos()->posicion(pos)->setTipo(efectivo->getIngresos()->posicion(pos - 1)->getTipo());
-					pos--;
+					ahorros.push(efectivo->getIngresos()->posicion(i)->getTotal());
 				}
-				efectivo->getIngresos()->posicion(pos)->setTotal(aux->getTotal());
-				efectivo->getIngresos()->posicion(pos)->setTipo(aux->getTipo());
+				else if (efectivo->getIngresos()->posicion(i)->getTipo() == "deposito") {
+					depositos.push(efectivo->getIngresos()->posicion(i)->getTotal());
+				}
+				else if (efectivo->getIngresos()->posicion(i)->getTipo() == "salario") {
+					salarios.push(efectivo->getIngresos()->posicion(i)->getTotal());
+				}
 			}
-
-			for (i = 0; i < efectivo->getIngresos()->longitud(); i++)
+		}
+		else {
+			for (i = 0; i < tarjeta->getIngresos()->longitud(); i++)
+			{
+				if (tarjeta->getIngresos()->posicion(i)->getTipo() == "ahorro")
+				{
+					ahorros.push(tarjeta->getIngresos()->posicion(i)->getTotal());
+				}
+				else if (tarjeta->getIngresos()->posicion(i)->getTipo() == "deposito") {
+					depositos.push(tarjeta->getIngresos()->posicion(i)->getTotal());
+				}
+				else if (tarjeta->getIngresos()->posicion(i)->getTipo() == "salario") {
+					salarios.push(tarjeta->getIngresos()->posicion(i)->getTotal());
+				}
+			}
+		}
+	}
+	void leerGastos(int cuenta)
+	{
+		int i;
+		if (cuenta == 1) {
+			for (i = 0; i < efectivo->getGastos()->longitud(); i++)
+			{
+				if (efectivo->getGastos()->posicion(i)->getTipo() == "comida")
+				{
+					comidas.push(efectivo->getGastos()->posicion(i)->getTotal());
+				}
+				else if (efectivo->getGastos()->posicion(i)->getTipo() == "salud") {
+					salud.push(efectivo->getGastos()->posicion(i)->getTotal());
+				}
+				else if (efectivo->getGastos()->posicion(i)->getTipo() == "entretenimiento") {
+					entrenimientos.push(efectivo->getGastos()->posicion(i)->getTotal());
+				}
+			}
+		}
+		else {
+			for (i = 0; i < tarjeta->getGastos()->longitud(); i++)
+			{
+				if (tarjeta->getGastos()->posicion(i)->getTipo() == "comida")
+				{
+					comidas.push(tarjeta->getGastos()->posicion(i)->getTotal());
+				}
+				else if (tarjeta->getGastos()->posicion(i)->getTipo() == "salud") {
+					salud.push(tarjeta->getGastos()->posicion(i)->getTotal());
+				}
+				else if (tarjeta->getGastos()->posicion(i)->getTipo() == "entretenimiento") {
+					entrenimientos.push(tarjeta->getGastos()->posicion(i)->getTotal());
+				}
+			}
+		}
+	}
+	double getBalance(int cuenta) {
+		double bal = 0, aumento = 0.0, resta = 0.0;
+		if (cuenta == 1) {
+			for (int i = 0; i < efectivo->getIngresos()->longitud(); i++)
 			{
 				aumento = efectivo->getIngresos()->posicion(i)->getTotal();
-				//cout << i << ")" << efectivo->getIngresos()->posicion(i)->getTipo() << " - S/." << aumento << endl;
 				[&bal](int x) {return bal = bal + x; }(aumento);
 			}
-		}
-		else {
-			for (i = 0; i < tarjeta->getIngresos()->longitud(); i++)
-			{
-				pos = i;
-				aux = new Ingreso(tarjeta->getIngresos()->posicion(i)->getTotal(), tarjeta->getIngresos()->posicion(i)->getTipo());
-
-				while ((pos > 0) && (tarjeta->getIngresos()->posicion(i)->getTotal() > aux->getTotal()))
-				{
-					tarjeta->getIngresos()->posicion(pos)->setTotal(tarjeta->getIngresos()->posicion(pos - 1)->getTotal());
-					tarjeta->getIngresos()->posicion(pos)->setTipo(tarjeta->getIngresos()->posicion(pos - 1)->getTipo());
-					pos--;
-				}
-				tarjeta->getIngresos()->posicion(pos)->setTotal(aux->getTotal());
-				tarjeta->getIngresos()->posicion(pos)->setTipo(aux->getTipo());
-			}
-
-			for (i = 0; i < tarjeta->getIngresos()->longitud(); i++)
-			{
-				aumento = tarjeta->getIngresos()->posicion(i)->getTotal();
-				//cout << i << ")" << tarjeta->getIngresos()->posicion(i)->getTipo() << " - S/." << aumento << endl;
-				[&bal](int x) {return bal = bal + x; }(aumento);
-			}
-		}
-		return balance = balance + bal;
-	}
-	float leerGastos(int cuenta, float balance)
-	{
-		int i, pos;
-		double bal = 0.0, resta = 0.0;
-		Gasto* aux;
-		if (cuenta == 1) {
-			for (i = 0; i < efectivo->getGastos()->longitud(); i++)
-			{
-				pos = i;
-				aux = new Gasto(efectivo->getGastos()->posicion(i)->getTotal(), efectivo->getGastos()->posicion(i)->getTipo());
-
-				while ((pos > 0) && (efectivo->getGastos()->posicion(i)->getTotal() > aux->getTotal()))
-				{
-					efectivo->getGastos()->posicion(pos)->setTotal(efectivo->getGastos()->posicion(pos - 1)->getTotal());
-					efectivo->getGastos()->posicion(pos)->setTipo(efectivo->getGastos()->posicion(pos - 1)->getTipo());
-					pos--;
-				}
-				efectivo->getGastos()->posicion(pos)->setTotal(aux->getTotal());
-				efectivo->getGastos()->posicion(pos)->setTipo(aux->getTipo());
-			}
-
-			for (i = 0; i < efectivo->getGastos()->longitud(); i++)
+			for (int i = 0; i < efectivo->getGastos()->longitud(); i++)
 			{
 				resta = efectivo->getGastos()->posicion(i)->getTotal();
-				//cout << i << ")" << efectivo->getGastos()->posicion(i)->getTipo() << " - S/." << resta << endl;
-				[&bal](int x) {return bal = bal + x; }(resta);
+				[&bal](int x) {return bal = bal - x; }(resta);
 			}
+			return bal;
 		}
 		else {
-			for (i = 0; i < tarjeta->getGastos()->longitud(); i++)
+			for (int i = 0; i < tarjeta->getIngresos()->longitud(); i++)
 			{
-				pos = i;
-				aux = new Gasto(tarjeta->getGastos()->posicion(i)->getTotal(), tarjeta->getGastos()->posicion(i)->getTipo());
-
-				while ((pos > 0) && (tarjeta->getGastos()->posicion(i)->getTotal() > aux->getTotal()))
-				{
-					tarjeta->getGastos()->posicion(pos)->setTotal(tarjeta->getGastos()->posicion(pos - 1)->getTotal());
-					tarjeta->getGastos()->posicion(pos)->setTipo(tarjeta->getGastos()->posicion(pos - 1)->getTipo());
-					pos--;
-				}
-				tarjeta->getGastos()->posicion(pos)->setTotal(aux->getTotal());
-				tarjeta->getGastos()->posicion(pos)->setTipo(aux->getTipo());
+				aumento = tarjeta->getIngresos()->posicion(i)->getTotal();
+				[&bal](int x) {return bal = bal + x; }(aumento);
 			}
-
-			for (i = 0; i < tarjeta->getGastos()->longitud(); i++)
+			for (int i = 0; i < tarjeta->getGastos()->longitud(); i++)
 			{
 				resta = tarjeta->getGastos()->posicion(i)->getTotal();
-				//cout << i << ")" << tarjeta->getGastos()->posicion(i)->getTipo() << " - S/." << resta << endl;
-				[&bal](int x) {return bal = bal + x; }(resta);
+				[&bal](int x) {return bal = bal - x; }(resta);
 			}
+			return bal;
 		}
-		return balance = balance - bal;
+	}
+	void procesarCola(int op) 
+	{
+		if (op == 1) {
+			while (!ahorros.empty()) {
+				cout << ahorros.front() << endl;
+				ahorros.pop();
+			}
+			while (!depositos.empty()) depositos.pop();
+			while (!salarios.empty()) salarios.pop();
+			while (!comidas.empty()) comidas.pop();
+			while (!salud.empty()) salud.pop();
+			while (!entrenimientos.empty()) entrenimientos.pop();
+		}
+		else if (op == 2)
+		{
+			while (!depositos.empty()) {
+				cout << depositos.front() << endl;
+				depositos.pop();
+			}
+			while (!ahorros.empty()) ahorros.pop();
+			while (!salarios.empty()) salarios.pop();
+			while (!comidas.empty()) comidas.pop();
+			while (!salud.empty()) salud.pop();
+			while (!entrenimientos.empty()) entrenimientos.pop();
+		}
+		else if (op == 3)
+		{
+			while (!salarios.empty()) {
+				cout << salarios.front() << endl;
+				salarios.pop();
+			}
+			while (!ahorros.empty()) ahorros.pop();
+			while (!depositos.empty()) depositos.pop();
+			while (!comidas.empty()) comidas.pop();
+			while (!salud.empty()) salud.pop();
+			while (!entrenimientos.empty()) entrenimientos.pop();
+		}
+		else if (op == 4)
+		{
+			while (!comidas.empty()) {
+				cout << comidas.front() << endl;
+				comidas.pop();
+			}
+			while (!ahorros.empty()) ahorros.pop();
+			while (!depositos.empty()) depositos.pop();
+			while (!salarios.empty()) salarios.pop();
+			while (!salud.empty()) salud.pop();
+			while (!entrenimientos.empty()) entrenimientos.pop();
+		}
+		else if (op == 5)
+		{
+			while (!salud.empty()) {
+				cout << salud.front() << endl;
+				salud.pop();
+			}
+			while (!ahorros.empty()) ahorros.pop();
+			while (!depositos.empty()) depositos.pop();
+			while (!salarios.empty()) salarios.pop();
+			while (!comidas.empty()) comidas.pop();
+			while (!entrenimientos.empty()) entrenimientos.pop();
+		}
+		else if (op == 6)
+		{
+			while (!entrenimientos.empty()) {
+				cout << entrenimientos.front() << endl;
+				entrenimientos.pop();
+			}
+			while (!ahorros.empty()) ahorros.pop();
+			while (!depositos.empty()) depositos.pop();
+			while (!salarios.empty()) salarios.pop();
+			while (!comidas.empty()) comidas.pop();
+			while (!entrenimientos.empty()) salud.pop();
+		}
 	}
 	void cargarIngresos()
 	{

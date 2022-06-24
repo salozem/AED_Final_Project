@@ -1,8 +1,7 @@
-39,salario
-43,deposito
-25,ahorro
-25,salario
-65,deposito
-11,deposito
-82,salario
-89,ahorro
+62,ahorro
+39,ahorro
+38,deposito
+26,salario
+75,salario
+80,salario
+37,deposito

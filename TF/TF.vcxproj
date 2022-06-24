@@ -144,6 +144,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cola.hpp" />
     <ClInclude Include="Controller.hpp" />
     <ClInclude Include="DataSetGenerator.hpp" />
     <ClInclude Include="Efectivo.hpp" />

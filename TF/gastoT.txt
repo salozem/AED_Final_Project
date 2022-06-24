@@ -1,6 +1,6 @@
-51,entretenimiento
-84,comida
-47,salud
-63,entretenimiento
-41,salud
-28,entretenimiento
+51,transporte
+36,entretenimiento
+60,entretenimiento
+68,entretenimiento
+43,comida
+84,casa

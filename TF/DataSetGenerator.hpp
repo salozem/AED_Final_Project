@@ -71,7 +71,7 @@ public:
 			for (int i = 0; i < nGa; i++)
 			{
 				num = 10 + rand() % 100;
-				nTipo = 1 + rand() % 3;
+				nTipo = 1 + rand() % 5;
 				switch (nTipo)
 				{
 				case 1:

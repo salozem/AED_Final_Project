@@ -36,19 +36,27 @@ public:
 		switch (opc)
 		{
 		case 1:
-			cout << "---------------BALANCE--------------\n";
-			balanceI = oFiles->leerIngresos(cuenta, balanceI);
-			cout << "\nTotal Ingresos: " << balanceI << endl;
-
-			balanceG = oFiles->leerGastos(cuenta, balanceG);
-			cout << "Total Gastos: " << -balanceG << endl;
-
-			cout << "El balance total es : S/. " << balanceI+balanceG << "\n";
-			cout << endl;
-			system("pause");
-
-			balanceI = 0.0;
-			balanceG = 0.0;
+			int op;
+			do
+			{
+				system("cls");
+				cout << "---------------BALANCE--------------\n";
+				cout << "\nEl balance total es : S/. " << "\n" << oFiles->getBalance(cuenta);
+				cout << endl;
+				cout << "\n---------------------------------------\n";
+				cout << "1)Mostrar ahorros\n";
+				cout << "2)Mostrar depositos\n";
+				cout << "3)Mostrar salarios\n";
+				cout << "4)Mostrar gastos de comida\n";
+				cout << "5)Mostrar gastos de salud\n";
+				cout << "6)Mostrar gastos de entretenimiento\n";
+				cout << "7)Menu principal\n";
+				cout << "Ingrese opcion:"; cin >> op;
+				oFiles->leerIngresos(cuenta);
+				oFiles->leerGastos(cuenta);
+				oFiles->procesarCola(op);
+				system("pause");
+			} while (op != 7);		
 			break;
 		case 2:
 			int opc;

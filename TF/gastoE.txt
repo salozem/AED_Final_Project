@@ -1,11 +1,6 @@
-10,entretenimiento
-72,salud
-24,entretenimiento
-104,entretenimiento
-103,entretenimiento
-21,entretenimiento
+60,salud
+59,entretenimiento
+82,entretenimiento
 79,entretenimiento
-53,entretenimiento
-40,entretenimiento
-87,salud
-61,salud
+14,transporte
+71,casa
