@@ -1,3 +1,2 @@
-# Trabajo Final del curso de Algoritmos y Estructuras de Datos
-
-El proyecto consiste en implementar una aplicación minimalista para gestionar y controlar gastos, al estilo Monefy.
+#Final Project of the Algorithms and Data Structure course.
+The project consists of implementing a minimalist application to manage and control expenses, Monefy style.
